@@ -29,7 +29,7 @@ function addToWypok(newSubtitles){
   if(newSubtitles.length==0){
     return;
   }
-  var entry = `#grupahatak #napisy nowe napisy do seriali: \n`;
+  var entry = `#grupahatak #napisy #hatakbot nowe napisy do seriali: \n`;
   for(var i in newSubtitles){
     entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]}) \n`;
   }
