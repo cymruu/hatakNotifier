@@ -2,7 +2,7 @@ var request = require('request');
 var xml2js = require('xml2js');
 var fs = require('fs');
 var Wykop = require('wykop-es6');
-var config = require('./config.js');
+var config = require('./configSok.js');
 var wykop = new Wykop(config.appkey, config.secret);
 function getNewSubtitles(since, cb){
   request('http://grupahatak.pl/rss/', (error, response, body)=>{
@@ -10,7 +10,6 @@ function getNewSubtitles(since, cb){
     if (!error && response.statusCode == 200) {
       xml2js.parseString(body, function(err, result){
         if(err)throw err;
-        updateLast(new Date(result.rss.channel[0].lastBuildDate));
         for(var i in result.rss.channel[0].item){
           if(new Date(result.rss.channel[0].item[i].pubDate) > since){
             newSubtitles.push(result.rss.channel[0].item[i]);
@@ -31,12 +30,14 @@ function addToWypok(newSubtitles){
   }
   var entry = `Wydaliśmy nowe napisy do: \n`;
   for(var i in newSubtitles){
-    entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]}) \n`;
+    var tag = getTag(newSubtitles[i].title[0]);
+    entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]}) ${tag}\n`;
   }
   entry+='\n#grupahatak #napisy #hatakbot';
   wykop.request('Entries', 'Add', {post: {body: entry}}, (err, response)=>{
       if(err) throw err;
       console.log(response);
+      updateLast(new Date(newSubtitles[0].pubDate[0]));
       return true;
 });
 }
