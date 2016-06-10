@@ -2,7 +2,7 @@ var request = require('request');
 var xml2js = require('xml2js');
 var fs = require('fs');
 var Wykop = require('wykop-es6');
-var config = require('./configSok.js');
+var config = require('./config.js');
 var wykop = new Wykop(config.appkey, config.secret);
 function getNewSubtitles(since, cb){
   request('http://grupahatak.pl/rss/', (error, response, body)=>{
