@@ -20,9 +20,10 @@ function getNewSubtitles(since, cb){
     }
   });
 }
-function getTag(title){
-
-  return '#'+title.toLowerCase().replace(/ /g,'');
+function getTags(title){
+  var tag = '#'+title.toLowerCase().replace(/ /g,'');
+  var tags = [tag, tag+'napisy'];
+  return tags;
 }
 function addToWypok(newSubtitles){
   if(newSubtitles.length==0){
@@ -30,12 +31,12 @@ function addToWypok(newSubtitles){
   }
   var entry = `Wydaliśmy nowe napisy do: \n`;
   for(var i in newSubtitles){
-    var tag = getTag(newSubtitles[i].title[0]);
-    entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]}) ${tag}\n`;
+    var tags = getTags(newSubtitles[i].title[0]);
+    entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]})\n${tags.join(' ')}`;
   }
   entry+='\n#grupahatak #napisy #hatakbot';
   wykop.request('Entries', 'Add', {post: {body: entry}}, (err, response)=>{
-      if(err) throw err;
+      if(err){console.log(err);throw err;}
       console.log(response);
       updateLast(new Date(newSubtitles[0].pubDate[0]));
       return true;
