@@ -32,7 +32,7 @@ function addToWypok(newSubtitles){
   var entry = `Wydaliśmy nowe napisy do: \n`;
   for(var i in newSubtitles){
     var tags = getTags(newSubtitles[i].title[0]);
-    entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]})\n${tags.join(' ')}`;
+    entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]})\n${tags.join(' ')}\n`;
   }
   entry+='\n#grupahatak #napisy #hatakbot';
   wykop.request('Entries', 'Add', {post: {body: entry}}, (err, response)=>{
@@ -53,4 +53,6 @@ function updateLast(lastUpdateTime){
     if(err)throw err;
 });
 }
-wykop.login(config.connection).then(getLastUpdate());
+wykop.login(config.connection).then((res)=>{
+  getLastUpdate();
+});
