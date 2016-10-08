@@ -21,7 +21,7 @@ function getNewSubtitles(since, cb){
   });
 }
 function getTags(title){
-  var tag = '#'+title.toLowerCase().replace(/ /g,'');
+  var tag = '#'+title.toLowerCase().replace(/\W/g, '');
   var tags = [tag, tag+'napisy'];
   return tags;
 }
