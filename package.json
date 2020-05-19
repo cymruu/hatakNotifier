@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/cymruu/hatakNotifier#readme",
   "dependencies": {
-    "request": "^2.72.0",
-    "wykop-es6": "^0.5.1",
-    "xml2js": "^0.4.16"
+    "request": "^2.88.2",
+    "wypokjs": "^0.1.4",
+    "xml2js": "^0.4.23"
   }
 }

@@ -1,9 +1,11 @@
 var request = require('request');
 var xml2js = require('xml2js');
 var fs = require('fs');
-var Wykop = require('wykop-es6');
+var {Client,Wykop} = require('wypokjs');
 var config = require('./config.js');
-var wykop = new Wykop(config.appkey, config.secret);
+var wykop = new Wykop({appkey: config.appkey, secret: config.secret});
+var client = new Client(wykop, {username: 'sokytsinolop', accountkey: config.connection, userkey: 'letmeloginonmyown'});
+
 function getNewSubtitles(since, cb){
   request('http://grupahatak.pl/rss/', (error, response, body)=>{
     var newSubtitles = [];
@@ -35,7 +37,7 @@ function addToWypok(newSubtitles){
     entry+=`${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]})\n${tags.join(' ')}\n`;
   }
   entry+='\n#grupahatak #napisy #hatakbot';
-  wykop.request('Entries', 'Add', {post: {body: entry}}, (err, response)=>{
+  client.request('entries/add', {postParams: {body: entry}}, (err, response)=>{
       if(err){console.log(err);throw err;}
       console.log(response);
       updateLast(new Date(newSubtitles[0].pubDate[0]));
@@ -53,6 +55,6 @@ function updateLast(lastUpdateTime){
     if(err)throw err;
 });
 }
-wykop.login(config.connection).then((res)=>{
+client.getUserKey().then((res)=>{
   getLastUpdate();
 });
