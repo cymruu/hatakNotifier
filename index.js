@@ -37,12 +37,11 @@ function addToWypok(newSubtitles) {
     entry += `${newSubtitles[i].title[0]} - [${newSubtitles[i].description[0]}](${newSubtitles[i].link[0]})\n${tags.join(' ')}\n`;
   }
   entry += '\n#grupahatak #napisy #hatakbot';
-  client.request('entries/add', { postParams: { body: entry } }, (err, response) => {
-    if (err) { console.log(err); throw err; }
-    console.log(response);
+  client.request('entries/add', { postParams: { body: entry } }).then(response => {
     updateLast(new Date(newSubtitles[0].pubDate[0]));
-    return true;
-  });
+  }).catch(err => {
+    throw err
+  })
 }
 function getLastUpdate() {
   fs.readFile(__dirname + '/last.txt', function (err, data) {
