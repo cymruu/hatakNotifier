@@ -4,7 +4,7 @@ var fs = require('fs');
 var { Client, Wykop } = require('wypokjs');
 var config = require('./config.js');
 var wykop = new Wykop({ appkey: config.appkey, secret: config.secret });
-var client = new Client(wykop, { username: 'sokytsinolop', accountkey: config.connection, userkey: 'letmeloginonmyown' });
+var client = new Client(wykop, { username: config.username, accountkey: config.connection, userkey: 'letmeloginonmyown', });
 
 function getNewSubtitles(since, cb) {
   request('http://grupahatak.pl/rss/', (error, response, body) => {
@@ -54,6 +54,6 @@ function updateLast(lastUpdateTime) {
     if (err) throw err;
   });
 }
-client.getUserKey().then((res) => {
+client.relogin().then((res) => {
   getLastUpdate();
-});
+})
